@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goleadores</title>
+    <link rel="stylesheet" href="/estilos/estilos.css">
+    <link rel="stylesheet" href="/estilos/tablagen.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/index.html"><img src="/imagenes/Dimayor.png"></a>
+        </div>
+        <nav>
+            <ul class="menu">
+                <li><a href="/index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#">Tablas</a>
+                    <ul class="submenu">
+                        <li><a href="/vistas/tablagen.html">Tabla General</a></li>
+                        <li><a href="#">Tabla de Goleadores</a></li>
+                        <li><a href="menosgol.html">Tabla de Porterías</a></li>
+                    </ul>
+                </li>
+                <li><a href="Equipos.html">Equipos</a></li>
+                <li><a href="calendario.html">Calendario</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <div class="container">
+        <table class="tabla">
+            <thead>
+                <tr>                    
+                    <th>Jugador</th>                    
+                    <th>Equipo</th>
+                    <th>Goles</th>
+                </tr>
+            </thead>
+            <tbody id="MaxGol">
+
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        fetch("https://v3.football.api-sports.io/players/topscorers?season=2023&league=239",{
+                "method": "GET",
+                "headers":{
+                    "x-rapidapi-host": "v3.football.api.io",
+                    "x-rapidapi-key": "108d033df2f6fbc21313659882e286df"
+                }
+        })
+            .then(response => response.json())
+            .then(data => maxgol(data))
+            .catch(error => console.log(error))
+        const maxgol =(data)=>{
+            goleadorliga = data.response;
+            let body=""
+            for (var i=0 ;i< goleadorliga.length;i++){
+                body+=`<tr>
+                            <td>${goleadorliga[i].player.firstname} ${goleadorliga[i].player.lastname}</td>
+                            <td>${goleadorliga[i].statistics[0].team.name}</td>
+                            <td>${goleadorliga[i].statistics[0].goals.total}</td>                    
+                        </tr>`
+            }
+            document.getElementById('MaxGol').innerHTML=body
+        }
+    </script>
+</body>
+</html>

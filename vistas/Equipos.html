@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista De Equipos</title>
+    <link rel="stylesheet" href="/estilos/estilos.css">
+    <link rel="stylesheet" href="/estilos/tablagen.css">
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/index.html"><img src="/imagenes/Dimayor.png"></a>
+        </div>
+        <nav>
+            <ul class="menu">
+                <li><a href="/index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#">Tablas</a>
+                    <ul class="submenu">
+                        <li><a href="/vistas/tablagen.html">Tabla General</a></li>
+                        <li><a href="tablagol.html">Tabla de Goleadores</a></li>
+                        <li><a href="menosgol.html">Tabla de Porterías</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Equipos</a></li>
+                <li><a href="calendario.html">Calendario</a></li>
+            </ul>
+        </nav>
+    </header>   
+    
+    
+    <div class="container">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Equipo</th>                                        
+                </tr>
+            </thead>
+            <tbody id="equipos">
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- El script para obtener datos-->
+    <script>
+        fetch("https://v3.football.api-sports.io/standings?league=239&season=2023",{
+            "method": "GET",
+            "headers":{
+                "x-rapidapi-host": "v3.football.api.io",
+                "x-rapidapi-key": "108d033df2f6fbc21313659882e286df"
+            }
+        }        
+        )
+        .then(response => response.json())
+        .then(data => DatosGen(data))
+        .catch(error => console.log(error))
+
+        const DatosGen = (data) =>{
+            tgen = data.response[0].league.standings[3];
+            console.table(tgen)
+            let body =""
+                for(var i = 0; i <tgen.length ; i++){
+                    body+=`<tr>
+                                <td>${tgen[i].rank}</td>
+                                <td>${tgen[i].team.name}</td>
+                            </tr>`                                                                    
+                }
+                document.getElementById('equipos').innerHTML=body
+                
+        }
+    </script>
+
+    </script>
+</body>
+</html>

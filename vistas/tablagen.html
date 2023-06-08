@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla General</title>
+    <link rel="stylesheet" href="/estilos/estilos.css">
+    <link rel="stylesheet" href="/estilos/tablagen.css">
+</head>
+<body>
+       <!-- Este es la cabera de la pagina, contiene las opciones 
+        para ver las tablas, equipo y calendario de juegos
+    -->
+    <header>
+        <div class="logo">
+            <a href="/index.html"><img src="/imagenes/Dimayor.png"></a>
+        </div>
+        <nav>
+            <ul class="menu">
+                <li><a href="/index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#">Tablas</a>
+                    <ul class="submenu">
+                        <li><a href="/vistas/tablagen.html">Tabla General</a></li>
+                        <li><a href="tablagol.html">Tabla de Goleadores</a></li>
+                        <li><a href="menosgol.html">Tabla de Porterías</a></li>
+                    </ul>
+                </li>
+                <li><a href="Equipos.html">Equipos</a></li>
+                <li><a href="calendario.html">Calendario</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Equipo</th>                    
+                    <th>PJ</th>
+                    <th>PG</th>
+                    <th>PE</th>
+                    <th>PP</th>
+                    <th>GF</th>
+                    <th>GC</th>
+                    <th>DG</th>
+                    <th>PTS</th>
+                </tr>
+            </thead>
+            <tbody id="general">
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- El script para obtener datos-->
+    <script>
+        fetch("https://v3.football.api-sports.io/standings?league=239&season=2023",{
+            "method": "GET",
+            "headers":{
+                "x-rapidapi-host": "v3.football.api.io",
+                "x-rapidapi-key": "108d033df2f6fbc21313659882e286df"
+            }
+        }        
+        )
+        .then(response => response.json())
+        .then(data => DatosGen(data))
+        .catch(error => console.log(error))
+
+        const DatosGen = (data) =>{
+            tgen = data.response[0].league.standings[3];
+            console.table(tgen)
+            let body =""
+                for(var i = 0; i <tgen.length ; i++){
+                    body+=`<tr>
+                                <td>${tgen[i].rank}</td>
+                                <td>${tgen[i].team.name}</td>
+                                <td>${tgen[i].all.played}</td>
+                                <td>${tgen[i].all.win}</td>
+                                <td>${tgen[i].all.draw}</td>
+                                <td>${tgen[i].all.lose}</td>
+                                <td>${tgen[i].all.goals.for}</td>
+                                <td>${tgen[i].all.goals.against}</td>
+                                <td>${tgen[i].goalsDiff}</td>
+                                <td>${tgen[i].points}</td>
+                            </tr>`                                                                    
+                }
+                document.getElementById('general').innerHTML=body
+                
+        }
+    </script>
+</body>
+</html>
